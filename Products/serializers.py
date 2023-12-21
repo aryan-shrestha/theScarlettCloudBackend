@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from drf_writable_nested.serializers import WritableNestedModelSerializer
+from cloudinary import CloudinaryImage
 
 from Products.models import Product, ProductImages, Category
 
@@ -9,9 +10,14 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ProductImageSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
     class Meta:     
         model= ProductImages
         fields = ['image']
+    
+    def get_image(self, obj):
+        return CloudinaryImage(obj.image.url).build_url()
 
 class ProductSerializer(WritableNestedModelSerializer):
     images = ProductImageSerializer(many=True)

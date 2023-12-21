@@ -1,4 +1,5 @@
 from django.db import models
+from cloudinary.models import CloudinaryField
 
 # Create your models here.
 
@@ -46,7 +47,9 @@ class Product(models.Model):
 class ProductImages(models.Model):
 
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=False, related_name='images')
-    image = models.ImageField(upload_to='products/', max_length=255)
+    image = CloudinaryField('image')
+
+
 
     def __str__(self):
         return self.product.name
