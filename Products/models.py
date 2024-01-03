@@ -13,7 +13,6 @@ class Category(models.Model):
     def __str__(self) -> str:
         return self.name
 
-
 def calculate_discount_percentage(original_price, discounted_price):
     if original_price <= 0 or discounted_price < 0:
         raise ValueError("Original price must be greater than 0, and discounted price must not be negative.")
@@ -24,7 +23,6 @@ def calculate_discount_percentage(original_price, discounted_price):
     return discount_percentage
 
 class Product(models.Model):
-
     name = models.CharField(max_length=255, unique=False, null=False)
     slug = models.CharField(max_length=255, unique=True, null=False)
     description = models.TextField(unique=False, null=False)

@@ -1,7 +1,9 @@
+from datetime import timedelta
 from pathlib import Path
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+from django.conf import settings
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -17,7 +19,7 @@ SECRET_KEY = 'django-insecure-#thsn_8o#lc*hi$n3x)72t3j-9f_t%_iak8)=z%aun6h(n^&nv
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-CORS_ALLOW_ALL_ORIGINS = True
+
 
 # Application definition
 
@@ -33,7 +35,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'cloudinary',
+    'djoser',
 
+    'account',
+    'cart',
     'Products',
 
 ]
@@ -48,6 +53,15 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173"
+    "https://the-scarlett-cloud.vercel.app",
+    # Add other allowed origins as needed
+]
+
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'backend.urls'
 
@@ -126,9 +140,27 @@ MEDIA_ROOT = 'media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(seconds=10),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}
+
 cloudinary.config(
     cloud_name = "djwyoxnkk",
     api_key = "569187721663967",
     api_secret = "2g1AqyrTrBe47HYWnNLn8yEntcE"
 )
+
 CLOUDINARY_URL="cloudinary://569187721663967:2g1AqyrTrBe47HYWnNLn8yEntcE@djwyoxnkk"
