@@ -56,7 +56,7 @@ MIDDLEWARE = [
 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173"
+    "http://localhost:5173",
     "https://the-scarlett-cloud.vercel.app",
     # Add other allowed origins as needed
 ]
