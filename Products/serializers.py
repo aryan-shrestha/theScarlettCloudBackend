@@ -3,11 +3,7 @@ from drf_writable_nested.serializers import WritableNestedModelSerializer
 from cloudinary import CloudinaryImage
 
 from Products.models import Product, ProductImages, Category
-
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = '__all__'
+from category.serializers import CategorySerializer
 
 class ProductImageSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()

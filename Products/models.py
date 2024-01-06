@@ -1,17 +1,9 @@
 from django.db import models
 from cloudinary.models import CloudinaryField
+from category.models import Category
 
 # Create your models here.
 
-class Category(models.Model):
-    name = models.CharField(max_length=255, null=False)
-    slug = models.CharField(max_length=255, unique=True, null=True)
-    description = models.TextField(null=False)
-    created_at = models.DateField(auto_now_add=True)
-    modified_at = models.DateField(auto_now=True)
-    
-    def __str__(self) -> str:
-        return self.name
 
 def calculate_discount_percentage(original_price, discounted_price):
     if original_price <= 0 or discounted_price < 0:
@@ -43,7 +35,6 @@ class Product(models.Model):
         super().save(*args, **kwargs)
     
 class ProductImages(models.Model):
-
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=False, related_name='images')
     image = CloudinaryField('image')
 

@@ -7,6 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('products/', include('Products.urls')),
     path('cart/', include('cart.urls')),
+    path('category/', include('category.urls')),
     path('account/', include('account.urls')),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
