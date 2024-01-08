@@ -94,21 +94,38 @@ class CartOperationsView(generics.CreateAPIView):
         
         cart_item.save()
         serializer = self.get_serializer(cart_item)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        data = {
+            'cart_item': serializer.data,
+            'cart_total': cart_item.cart.total
+        }
+        return Response(data=data, status=status.HTTP_200_OK)
+
+
+class CartItemDeleteView(generics.DestroyAPIView):
+    serializer_class = CartItemSerializer
+    lookup_field = 'pk'
+    permission_classes = [AllowAny]
+
+
+    def get_object(self):
+        
+        cart_item_id = self.kwargs.get('pk')
+        try:
+            return CartItem.objects.get(id=cart_item_id)
+        except CartItem.DoesNotExist:
+            return Response({'detail': 'Cart Item not found'}, status=status.HTTP_404_NOT_FOUND)
     
     def delete(self, request, *args, **kwargs):
         session_key = get_session_id(request)
-        cart_item_id = request.data.get('cart_item_id')
-        
-        try:
-            cart_item = CartItem.objects.get(id=cart_item_id)
-        except CartItem.DoesNotExist:
-            return Response({'detail': 'Item not found in the cart'}, status=status.HTTP_404_NOT_FOUND)
-
+        cart_item = self.get_object()
         cart = cart_item.cart
 
         if session_key == cart.session_key:
             cart_item.delete()
-            return Response({'detail': 'Cart item deleted'}, status=status.HTTP_204_NO_CONTENT)
+            data = {
+                'detail': 'Cart item deleted',
+                'cart_total': cart_item.cart.total
+            }
+            return Response(data=data)
         else:
-            return Response({'detail': "Invalid session id"}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'detail': 'Invalid session id'}, status=status.HTTP_401_UNAUTHORIZED)
