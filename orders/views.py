@@ -58,13 +58,13 @@ class InitiateKhaltiPayment(generics.CreateAPIView):
         # khalti payment initialization
 
         url = "https://a.khalti.com/api/v2/epayment/initiate/"
-        return_url = "http://127.0.0.1:8000/orders/verify-khalti-payment/"
+        return_url = "http://aryanshrestha274.pythonanywhere.com/orders/verify-khalti-payment/"
         purchase_order_id = order.order_number
         amount = float(order.grand_total) * 100
         customer_name = f"{order.first_name} {order.last_name}"
         payload = json.dumps({
             "return_url": return_url,
-            "website_url": "http://127.0.0.1:8000/",
+            "website_url": "https://the-scarlett-cloud.vercel.app/",
             "amount": int(amount),
             "purchase_order_id": purchase_order_id,
             "purchase_order_name": customer_name,
@@ -134,12 +134,12 @@ class VerifyKhaltiPayment(View):
 
             move_cart_items_to_ordered_items(request, order, payment, cart_items)
 
-            response = redirect("http://localhost:5173/payment-success")
+            response = redirect("https://the-scarlett-cloud.vercel.app/payment-success")
             response['Cache-Control'] = 'no-store'
             return response
 
         else:
-            response = redirect("http://localhost:5173/payment-failure")
+            response = redirect("https://the-scarlett-cloud.vercel.app/payment-failure")
             response['Cache-Control'] = 'no-store'
             return response
 
