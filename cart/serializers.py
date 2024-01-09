@@ -21,4 +21,4 @@ class CartItemSerializer(ModelSerializer):
 class CartSerializer(ModelSerializer):
     class Meta:
         model = Cart
-        fields = ['id', 'session_key', 'date_added', 'total']
+        fields = ['id', 'date_added', 'total']
