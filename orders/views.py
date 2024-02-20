@@ -58,13 +58,13 @@ class InitiateKhaltiPayment(generics.CreateAPIView):
         # khalti payment initialization
 
         url = "https://a.khalti.com/api/v2/epayment/initiate/"
-        return_url = "http://aryanshrestha274.pythonanywhere.com/orders/verify-khalti-payment/"
+        return_url = "http://127.0.0.1:8000/orders/verify-khalti-payment/"
         purchase_order_id = order.order_number
         amount = float(order.grand_total) * 100
         customer_name = f"{order.first_name} {order.last_name}"
         payload = json.dumps({
             "return_url": return_url,
-            "website_url": "https://the-scarlett-cloud.vercel.app/",
+            "website_url": "http://localhost:5173/",
             "amount": int(amount),
             "purchase_order_id": purchase_order_id,
             "purchase_order_name": customer_name,
@@ -81,6 +81,7 @@ class InitiateKhaltiPayment(generics.CreateAPIView):
         }
 
         response = requests.request("POST", url, headers=headers, data=payload)
+        print(response.text)
         new_res = json.loads(response.text)
         print(new_res)
         return Response({'payment_url': new_res['payment_url']}, status=status.HTTP_200_OK)
@@ -160,3 +161,10 @@ class OrderDetailView(generics.RetrieveAPIView):
         instance = self.get_object()
         order_serializer = self.get_serializer(instance)
         return Response(order_serializer.data, status=status.HTTP_200_OK)
+    
+
+class OrderListView(generics.ListAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [AllowAny]
+
